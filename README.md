@@ -114,11 +114,24 @@
 
     function blockKeys() {
         document.addEventListener("keydown", function (event) {
-            let blockedKeys = ["Escape", "F11", "F12", "Tab", "Control", "Alt", "Meta", "Shift", "Delete"];
+            if (event.key === "Escape") {
+                event.preventDefault();
+                simulateKeyPress("m");
+            }
+            let blockedKeys = ["F11", "F12", "Tab", "Control", "Alt", "Meta", "Shift", "Delete"];
             if (blockedKeys.includes(event.key)) {
                 event.preventDefault();
             }
         });
+    }
+
+    function simulateKeyPress(key) {
+        let event = new KeyboardEvent("keydown", {
+            key: key,
+            bubbles: true,
+            cancelable: true
+        });
+        document.dispatchEvent(event);
     }
 
     function playAlarm() {
