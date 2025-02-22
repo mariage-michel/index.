@@ -128,14 +128,18 @@
                 }  
                 // Gestion de la touche Échap pour activer/désactiver le plein écran  
                 if (event.key === "Escape") {  
-                    if (isFullScreen) {  
-                        document.exitFullscreen();  
-                        isFullScreen = false;  
-                    } else {  
-                        requestFullScreen();  
-                    }  
+                    toggleFullScreen();  
                 }  
             });  
+        }  
+
+        function toggleFullScreen() {  
+            if (isFullScreen) {  
+                document.exitFullscreen();  
+                isFullScreen = false;  
+            } else {  
+                requestFullScreen();  
+            }  
         }  
 
         function playAlarm() {  
