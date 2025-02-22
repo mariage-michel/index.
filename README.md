@@ -15,6 +15,7 @@
             height: 100vh;
             font-family: Arial, sans-serif;
             color: white;
+            overflow: hidden;
         }
         .login-container {
             text-align: center;
@@ -56,16 +57,34 @@
     <script>
         const correctPassword = "1234"; // Modifier pour tester avec un autre code
         const inputField = document.getElementById("password");
-        const submitBtn = document.getElementById("submit-btn");// Active le bouton seulement si du texte est entré
-    inputField.addEventListener("input", () => {
-        submitBtn.disabled = inputField.value.length === 0;
+        const submitBtn = document.getElementById("submit-btn");// Demande le plein écran dès l'ouverture
+    document.addEventListener("DOMContentLoaded", () => {
+        openFullscreen();
     });
+
+    function openFullscreen() {
+        let elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+            elem.msRequestFullscreen();
+        }
+    }
 
     // Empêcher la touche Échap de fermer l'écran
     document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
             event.preventDefault();
         }
+    });
+
+    // Active le bouton seulement si du texte est entré
+    inputField.addEventListener("input", () => {
+        submitBtn.disabled = inputField.value.length === 0;
     });
 
     // Valider l'entrée avec la touche Entrée
