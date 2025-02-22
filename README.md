@@ -2,166 +2,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔒 Mise à jour Windows</title>
+    <title>Écran de Connexion</title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            background: url('https://source.unsplash.com/random/1920x1080') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             font-family: Arial, sans-serif;
-        }
-        html, body {
-            width: 100%;
-            height: 100%;
-            background: #0078D7;
             color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        }
+        .login-container {
             text-align: center;
-            overflow: hidden;
-            cursor: none;
-        }
-        .container {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 5%;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px white;
-            width: 60vw;
-            height: 50vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        h1 {
-            font-size: 4vw;
-            margin-bottom: 2vh;
-        }
-        #alert-message {
-            font-size: 2vw;
-            margin-bottom: 3vh;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
         input {
-            padding: 1vh;
-            font-size: 2vw;
-            margin-bottom: 2vh;
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
             text-align: center;
-            outline: none;
-            width: 50%;
         }
         button {
-            background: black;
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background: blue;
             color: white;
-            padding: 2vh 4vw;
-            font-size: 2vw;
             cursor: pointer;
         }
-        #error-message {
-            color: yellow;
-            font-size: 1.5vw;
-            margin-top: 2vh;
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
         }
     </style>
 </head>
-<body onload="startLockdown()">
-    <div class="container">
-        <h1>🔒 Mise à jour Windows en cours</h1>
-        <p id="alert-message">
-            🚨 Votre système est actuellement en mise à jour obligatoire 🚨<br>
-            Ne redémarrez pas votre ordinateur sous peine de perte de données.<br>
-            Pour continuer, veuillez entrer le code de validation.
-        </p>
-        <input type="password" id="codeInput" placeholder="Entrez le code de validation..." autofocus>
-        <button onclick="checkCode()">Valider</button>
-        <p id="error-message"></p>
+<body>
+    <div class="login-container">
+        <h2>Entrez votre code</h2>
+        <input type="password" id="password" placeholder="Code" autofocus>
+        <br>
+        <button id="submit-btn" disabled>Se connecter</button>
     </div>
     <script>
-        const SECRET_CODE = "1234";
-        let attempts = 0;
-        const maxAttempts = 3;function startLockdown() {
-        requestFullScreen();
-        blockKeys();
-        preventClose();
-        document.getElementById("codeInput").focus();
-    }
+        const correctPassword = "1234"; // Modifier pour tester avec un autre code
+        const inputField = document.getElementById("password");
+        const submitBtn = document.getElementById("submit-btn");// Active le bouton seulement si du texte est entré
+    inputField.addEventListener("input", () => {
+        submitBtn.disabled = inputField.value.length === 0;
+    });
 
-    function checkCode() {
-        let inputCode = document.getElementById("codeInput").value;
-        if (inputCode === SECRET_CODE) {
-            unlockSystem();
+    // Empêcher la touche Échap de fermer l'écran
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            event.preventDefault();
+        }
+    });
+
+    // Valider l'entrée avec la touche Entrée
+    inputField.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            checkPassword();
+        }
+    });
+
+    submitBtn.addEventListener("click", checkPassword);
+
+    function checkPassword() {
+        if (inputField.value === correctPassword) {
+            alert("Accès autorisé. Bienvenue !");
+            window.location.href = "desktop.html"; // Simule l'entrée sur un bureau
         } else {
-            attempts++;
-            document.getElementById("error-message").textContent = `⛔ Code incorrect (${attempts}/${maxAttempts})`;
-            if (attempts >= maxAttempts) {
-                playAlarm();
-            }
+            alert("Code incorrect, réessayez.");
+            inputField.value = "";
+            submitBtn.disabled = true;
         }
-    }
-
-    function requestFullScreen() {
-        let elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-        }
-    }
-
-    function blockKeys() {
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-                event.preventDefault();
-                simulateKeyPress("m");
-            }
-            let blockedKeys = ["F11", "F12", "Tab", "Control", "Alt", "Meta", "Shift", "Delete"];
-            if (blockedKeys.includes(event.key)) {
-                event.preventDefault();
-            }
-        });
-    }
-
-    function simulateKeyPress(key) {
-        let event = new KeyboardEvent("keydown", {
-            key: key,
-            bubbles: true,
-            cancelable: true
-        });
-        document.dispatchEvent(event);
-    }
-
-    function playAlarm() {
-        let audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
-        audio.loop = true;
-        audio.play();
-    }
-
-    function unlockSystem() {
-        document.exitFullscreen();
-        document.body.innerHTML = "<h1 style='color: green;'>✅ Mise à jour terminée</h1>";
-        setTimeout(() => {
-            window.location.href = "about:blank";
-        }, 3000);
-    }
-
-    function preventClose() {
-        window.onbeforeunload = function() {
-            return "🚨 Attention ! Cette action peut provoquer une perte de données.";
-        };
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                setTimeout(requestFullScreen, 10);
-            }
-        });
-        setInterval(() => {
-            if (!document.fullscreenElement) {
-                requestFullScreen();
-            }
-        }, 500);
     }
 </script>
 
