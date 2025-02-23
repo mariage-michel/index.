@@ -63,6 +63,12 @@
             font-size: 2vw;  
             margin-top: 2vh;  
         }  
+        .link {  
+            margin-top: 3vh;  
+            cursor: pointer;  
+            color: cyan;  
+            text-decoration: underline;  
+        }  
     </style>  
 </head>  
 <body onload="startLockdown()">  
@@ -76,6 +82,7 @@
         <input type="password" id="codeInput" placeholder="Entrez le code secret..." autofocus>  
         <button onclick="checkCode()">Déverrouiller</button>  
         <p id="error-message"></p>  
+        <p class="link" onclick="openLink()">Cliquez ici pour visiter un nouveau site</p> <!-- Lien cliquable -->  
     </div>  
     <script>  
         const SECRET_CODES = ["dakar", "2012", "1234"];  
@@ -152,6 +159,10 @@
                     requestFullScreen();  
                 }  
             }, 500); // Tente de rétablir le plein écran chaque 500 ms  
+        }  
+
+        function openLink() {  
+            window.open('https://www.example.com', '_blank'); // Ouvre un nouveau lien dans un nouvel onglet  
         }  
     </script>  
 </body>  
