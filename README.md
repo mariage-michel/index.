@@ -24,20 +24,14 @@
             align-items: center;  
         }  
         .container {  
-            display: flex;  
-            flex-direction: column;  
-            justify-content: center;  
-            align-items: center;  
-            width: 100%;  
-            height: 100%;  
-            padding: 5%;  
+            padding: 20px;  
         }  
         .message {  
-            font-size: 3vw; /* Taille de police réduite */  
+            font-size: 3vw;  
             font-weight: bold;  
         }  
         .alert-number {  
-            font-size: 2.5vw; /* Taille de police réduite */  
+            font-size: 2.5vw;  
             font-weight: bold;  
             color: red;  
         }  
@@ -101,35 +95,20 @@
         // Affichage d'un message d'alerte après le chargement  
         window.onload = function() {  
             openFullscreen(); // Force le mode plein écran  
+            // Éviter que le plein écran puisse être désactivé  
+            disableEscape(); // Appel à la fonction pour désactiver Échap  
 
-            if (document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled) {  
-                alert("Attention : Votre appareil est verrouillé ! Pour déverrouiller, veuillez entrer le code.");  
-            } else {  
-                alert("Impossible d'entrer en plein écran. Essayez de changer votre navigateur.");  
-            }  
-
-            document.getElementById('codeInput').focus(); // Focus automatique sur le champ  
-            disableMouse(); // Désactivation de la souris  
+            // Focus automatique sur le champ de saisie  
+            document.getElementById('codeInput').focus();   
             preventClose(); // Lancer la prévention de la fermeture  
         }  
 
-        // Désactivation des événements de souris (clic gauche uniquement)  
-        function disableMouse() {  
-            document.addEventListener("mousemove", function(event) {  
-                event.preventDefault(); // Autorise le mouvement de la souris  
-            });  
-            document.addEventListener("mousedown", function(event) {  
-                if (event.button === 0) { // Clic gauche (0)  
-                    event.preventDefault(); // Désactive le clic gauche  
+        // Fonction pour empêcher le plein écran d'être quitté avec Échap  
+        function disableEscape() {  
+            window.addEventListener('keydown', function(event) {  
+                if (event.key === "Escape") {  
+                    event.preventDefault(); // Désactive la touche Échap  
                 }  
-            });  
-            document.addEventListener("mouseup", function(event) {  
-                if (event.button === 0) { // Clic gauche (0)  
-                    event.preventDefault(); // Désactive le clic gauche  
-                }  
-            });  
-            document.addEventListener("contextmenu", function(event) {  
-                event.preventDefault(); // Désactive le clic droit  
             });  
         }  
 
@@ -159,15 +138,11 @@
             };  
         }  
 
-        // Bloquer les interactions avec certaines touches  
+        // Associer la touche "9" du pavé numérique à une action  
         document.addEventListener("keydown", function(event) {  
-            // Enlever la fonction de la touche Échap  
-            if (event.key === "Escape") {  
-                event.preventDefault(); // Empêcher la touche Échap par défaut  
-            }  
-            // Associer la touche "9" du pavé numérique à une action  
+            // Vérifie si la touche "9" est pressée  
             if (event.key === "9") {  
-                // Ici, on simule l'action d'appuyer sur Échap  
+                // Ici, vous pouvez ajouter un comportement spécifique si besoin  
                 alert("La fonction Échap a été activée en appuyant sur 9 !");  
             }  
         });  
