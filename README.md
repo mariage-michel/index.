@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title>🔒 Sécurité Système</title>  
     <style>  
+        /* Styles précédemment ajoutés ici */  
         * {  
             margin: 0;  
             padding: 0;  
@@ -38,10 +39,6 @@
         h1 {  
             font-size: 5vw;  
             margin-bottom: 2vh;  
-        }  
-        #alert-message {  
-            font-size: 3vw;  
-            margin-bottom: 3vh;  
         }  
         input {  
             padding: 1vh;  
@@ -82,7 +79,7 @@
         <input type="password" id="codeInput" placeholder="Entrez le code secret..." autofocus>  
         <button onclick="checkCode()">Déverrouiller</button>  
         <p id="error-message"></p>  
-        <p class="link" onclick="openLink()">Cliquez ici pour visiter un nouveau site</p> <!-- Lien cliquable -->  
+        <p class="link" onclick="openLink()">Cliquez ici pour visiter un nouveau site</p>  
     </div>  
     <script>  
         const SECRET_CODES = ["dakar", "2012", "1234"];  
@@ -94,6 +91,11 @@
             blockKeys();  
             preventClose();  
             document.getElementById("codeInput").focus();  
+
+            // Ajouter un écouteur d'événements forçant la confirmation  
+            window.onbeforeunload = function (event) {  
+                return "Êtes-vous sûr de vouloir quitter cette page ?";  
+            };  
         }  
 
         function checkCode() {  
@@ -146,23 +148,16 @@
         }  
 
         function preventClose() {  
-            window.onbeforeunload = function() {  
-                return "🚨 Attention ! Cette action peut provoquer une perte de données.";  
-            };  
-            document.addEventListener("visibilitychange", function() {  
+            // Intercepter la fermeture et rediriger vers la même page  
+            window.setInterval(function() {  
                 if (document.hidden) {  
-                    setTimeout(requestFullScreen, 100); // Récupère le plein écran après un court délai  
+                    window.location.href = window.location.href; // Rediriger vers la même page  
                 }  
-            });  
-            setInterval(() => {  
-                if (!document.fullscreenElement) {  
-                    requestFullScreen();  
-                }  
-            }, 500); // Tente de rétablir le plein écran chaque 500 ms  
+            }, 1000); // Vérifie chaque seconde  
         }  
 
         function openLink() {  
-            window.open('https://www.example.com', '_blank'); // Ouvre un nouveau lien dans un nouvel onglet  
+            window.open('https://www.example.com', '_blank'); // Ouvre dans un nouvel onglet  
         }  
     </script>  
 </body>  
